@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# Virtual envs
+/research/venv/
+/backend/venv/
+/.venv/
+
+# Notebooks
+.ipynb_checkpoints/
+
+# macOS
+.DS_Store
