@@ -40,6 +40,7 @@
   let error = '';
   let showResult = false;
   const animatedScore = tweened(0, { duration: 1000 });
+  let resultRef;  // <--- ref for scrolling
 
   // --- Submit handler ---
   async function handlePredict() {
@@ -56,8 +57,15 @@
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const { predicted_exam_score } = await res.json();
+
+      // show and animate
       showResult = true;
       animatedScore.set(predicted_exam_score);
+
+      // scroll into view
+      await tick();  // wait for DOM update
+      resultRef.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
     } catch (e) {
       error = e.message;
     } finally {
@@ -65,7 +73,7 @@
     }
   }
 
-  // --- Helpers ---
+  import { tick } from 'svelte';
   const selectFields = new Set([
     'gender',
     'diet_quality',
@@ -109,7 +117,6 @@
               <option value="1">Average</option>
               <option value="2">Good</option>
             {:else}
-              <!-- binary fields -->
               <option value="0">No</option>
               <option value="1">Yes</option>
             {/if}
@@ -138,7 +145,11 @@
   {/if}
 
   {#if showResult}
-    <div in:fade class="result-card">
+    <div
+      bind:this={resultRef}
+      in:fade
+      class="result-card"
+    >
       <h2>🎓 Predicted Score</h2>
       <p class="score">{$animatedScore.toFixed(2)}%</p>
     </div>
