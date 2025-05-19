@@ -107,3 +107,22 @@ body {
   color: var(--accent);
   margin: 0;
 }
+
+/* Toggle checkbox (simple) */
+.toggle {
+  width: 2rem;
+  height: 1rem;
+  accent-color: var(--accent);
+}
+
+/* The “after‐optimization” value display */
+.value {
+  box-sizing: border-box;
+  width: 100px;
+  height: 35px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 0 0.5rem;
+  font-weight: 600;
+}
