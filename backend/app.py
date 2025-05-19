@@ -1,12 +1,28 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import joblib
 import numpy as np
 from typing import List, Dict
-from pydantic import BaseModel
 
+# 1) Create a single FastAPI instance
+app = FastAPI(title="UpGrade Exam Score Predictor")
 
-# 1) Define the input schema
+# 2) Enable CORS so your frontend (likely on port 5173) can talk to it
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],        # tighten this in production!
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# 3) Health check
+@app.get("/health")
+def health():
+    return {"message": "connected"}
+
+# Input schema
 class StudentFeatures(BaseModel):
     age: int # 0,1
     gender: int # 0,1
@@ -22,11 +38,8 @@ class StudentFeatures(BaseModel):
     mental_health_rating: int # 0-10
     extracurricular_participation: int # 0,1
 
-# 2) Load your frozen model
+# Load model
 model = joblib.load("model.joblib")
-
-# 3) Spin up FastAPI
-app = FastAPI(title="UpGrade Exam Score Predictor")
 
 @app.post("/predict")
 def predict(student: StudentFeatures):
