@@ -24,31 +24,25 @@ def encode_features(df: pd.DataFrame) -> pd.DataFrame:
     diet_map   = {'Poor': 0, 'Fair': 1, 'Good': 2}
     internet_map = {'Poor': 0, 'Average': 1, 'Good': 2}
 
-    df['gender']                        = df['gender'].map(gender_map)
-    df['part_time_job']                 = df['part_time_job'].map(binary_map)
+    df['gender'] = df['gender'].map(gender_map)
+    df['part_time_job'] = df['part_time_job'].map(binary_map)
     df['extracurricular_participation'] = df['extracurricular_participation'].map(binary_map)
-    df['diet_quality']                  = df['diet_quality'].map(diet_map)
-    df['internet_quality']              = df['internet_quality'].map(internet_map)
+    df['diet_quality'] = df['diet_quality'].map(diet_map)
+    df['internet_quality'] = df['internet_quality'].map(internet_map)
     return df
 
 def main():
-    # 1. Load data
     print(f"Loading data from {DATA_PATH}")
     df = pd.read_csv(DATA_PATH)
-
-    # 2. Encode categorical features
     df = encode_features(df)
-
-    # 3. Prepare X and y
     X = df.drop(columns=['exam_score'])
     y = df['exam_score']
 
-    # 4. Split into train/test
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
 
-    # 5. Train Linear Regression model
+    # 5. Train 
     model = LinearRegression()
     model.fit(X_train, y_train)
 
@@ -58,7 +52,7 @@ def main():
     print(f"Training R²: {train_r2:.3f}")
     print(f"Test     R²: {test_r2:.3f}")
 
-    # 7. Serialize the trained model
+    # 7. Serialize
     joblib.dump(model, MODEL_PATH)
     print(f"Model saved to {MODEL_PATH}")
 
