@@ -212,10 +212,11 @@
         </div>
       {:else}
         <!-- Optimize Mode -->
-        <div in:fade class="space-y-2">
+        <div in:fade class="s3pace-y-2">
           <h2 class="text-lg font-semibold">🔧 Habit Adjustments</h2>
           {#each changes as {key,value,color} (key)}
             <div class="row">
+              <!-- svelte-ignore a11y_label_has_associated_control -->
               <label>{key.replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase())}</label>
               <div class="value" style="color:{color}">
                 {value.toFixed(
